@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-app
+  namespace: flask-namespace
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: flask-app
+  template:
+    metadata:
+      labels:
+        app: flask-app
+    spec:
+      containers:
+        - name: flask-container
+          image: ghcr.io/ankush97/flask-app:latest
+          ports:
+            - containerPort: 5000
+          env:
+            - name: PGDB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: flask-config
+                  key: PGDB_HOST
+            - name: PGDB_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: flask-config
+                  key: PGDB_USER
+            - name: PGDB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: flask-secret
+                  key: PGDB_PASSWORD
+            - name: PGDB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: flask-config
+                  key: PGDB_NAME
+            - name: REDIS_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: flask-config
+                  key: REDIS_HOST
