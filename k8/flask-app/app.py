@@ -11,10 +11,8 @@ redis_host = os.getenv("REDIS_HOST")
 
 app = Flask(__name__)
 
-# Connect to Redis
 cache = redis.Redis(host=redis_host, port=6379)
 
-# Connect to PostgreSQL
 def get_db_connection():
     conn = psycopg2.connect(host=db_host,
                             database=db_name,
